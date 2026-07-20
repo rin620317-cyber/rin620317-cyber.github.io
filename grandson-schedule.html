@@ -519,8 +519,8 @@
                 events.push({ text: '朝来宿泊', class: 'stay', period: 'all' });
             }
 
-            // 8月11日～14日：るあ保育園休み（4日間・終日）
-            if (month === 7 && dateNum >= 11 && dateNum <= 14) {
+            // 8月10日の週の平日：るあ保育園休み（終日／11日は祝日のため除く）
+            if (month === 7 && (dateNum === 10 || dateNum === 12 || dateNum === 13 || dateNum === 14)) {
                 events.push({ text: 'るあ保育園休み', class: 'hoikuen', period: 'all' });
             }
 
