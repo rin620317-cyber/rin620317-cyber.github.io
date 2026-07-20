@@ -235,6 +235,73 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .day-weekday {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .weekdays {
+                display: none;
+            }
+
+            .days {
+                display: block;
+                gap: 0;
+                background: white;
+                padding: 0;
+            }
+
+            .day {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                min-height: auto;
+                padding: 10px 14px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .day.other-month {
+                display: none;
+            }
+
+            .day-number {
+                flex-shrink: 0;
+                width: 34px;
+                font-size: 18px;
+                margin-bottom: 0;
+                padding-top: 2px;
+            }
+
+            .day-weekday {
+                display: inline-block;
+                font-size: 12px;
+                font-weight: normal;
+                color: #999;
+                margin-left: 2px;
+            }
+
+            .day.holiday .day-weekday {
+                color: #d32f2f;
+            }
+
+            .events {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                flex: 1;
+            }
+
+            .event {
+                margin: 0;
+                white-space: nowrap;
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -456,6 +523,13 @@
                 const dayNumber = document.createElement('div');
                 dayNumber.className = 'day-number';
                 dayNumber.textContent = date.getDate();
+
+                const weekdayNames = ['日', '月', '火', '水', '木', '金', '土'];
+                const dayWeekday = document.createElement('span');
+                dayWeekday.className = 'day-weekday';
+                dayWeekday.textContent = weekdayNames[date.getDay()];
+                dayNumber.appendChild(dayWeekday);
+
                 dayEl.appendChild(dayNumber);
 
                 const events = getEvents(date);
