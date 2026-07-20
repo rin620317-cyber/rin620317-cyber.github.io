@@ -163,6 +163,12 @@
             border-left-color: #c2185b;
         }
 
+        .event.hoikuen {
+            background: #e0f7fa;
+            color: #00838f;
+            border-left-color: #00838f;
+        }
+
         .legend {
             background: white;
             border-radius: 15px;
@@ -288,6 +294,10 @@
                     <div class="legend-text">お泊り（宿泊・お預け）</div>
                 </div>
                 <div class="legend-item">
+                    <div class="legend-color" style="background: #e0f7fa; border-left-color: #00838f;"></div>
+                    <div class="legend-text">るあ 保育園休み</div>
+                </div>
+                <div class="legend-item">
                     <div class="legend-color" style="background: #ffe6e6;"></div>
                     <div class="legend-text">祝日</div>
                 </div>
@@ -349,6 +359,11 @@
             // 8月16日～17日：朝来宿泊（両親同行）
             if (month === 7 && dateNum >= 16 && dateNum <= 17) {
                 events.push({ text: '朝来宿泊', class: 'stay' });
+            }
+
+            // 8月11日～14日：るあ保育園休み（4日間）
+            if (month === 7 && dateNum >= 11 && dateNum <= 14) {
+                events.push({ text: 'るあ保育園休み', class: 'hoikuen' });
             }
 
             // 8月28日：始業式
