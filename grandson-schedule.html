@@ -519,6 +519,11 @@
                 events.push({ text: 'るあとゆあ預け', class: 'stay', period: 'all' });
             }
 
+            // 7月31日：eo光工事（13:30～）
+            if (month === 6 && dateNum === 31) {
+                events.push({ text: 'eo光工事13:30', class: 'event', period: 'pm' });
+            }
+
             // 8月16日～17日：朝来宿泊（両親同行・両日終日）
             if (month === 7 && dateNum >= 16 && dateNum <= 17) {
                 events.push({ text: '朝来宿泊', class: 'stay', period: 'all' });
