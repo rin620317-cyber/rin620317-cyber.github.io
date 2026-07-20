@@ -531,6 +531,13 @@
                 date.getDate() === now.getDate();
         }
 
+        function isPast(date) {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return dateStart < todayStart;
+        }
+
         function renderCalendar(year, month, containerId) {
             const days = createCalendar(year, month);
             const container = document.getElementById(containerId);
@@ -561,6 +568,11 @@
 
                 // 8月28日以降をグレースケール表示
                 if (date.getMonth() === 7 && date.getDate() >= 28) {
+                    dayEl.classList.add('grayscale');
+                }
+
+                // 終わった過去の日はグレーアウト
+                if (isPast(date)) {
                     dayEl.classList.add('grayscale');
                 }
 
