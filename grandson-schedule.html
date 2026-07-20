@@ -169,6 +169,12 @@
             border-left-color: #00838f;
         }
 
+        .event.pool {
+            background: #fffde7;
+            color: #f9a825;
+            border-left-color: #f9a825;
+        }
+
         .legend {
             background: white;
             border-radius: 15px;
@@ -298,6 +304,10 @@
                     <div class="legend-text">るあ 保育園休み</div>
                 </div>
                 <div class="legend-item">
+                    <div class="legend-color" style="background: #fffde7; border-left-color: #f9a825;"></div>
+                    <div class="legend-text">ゆあ プライベートプール</div>
+                </div>
+                <div class="legend-item">
                     <div class="legend-color" style="background: #ffe6e6;"></div>
                     <div class="legend-text">祝日</div>
                 </div>
@@ -339,6 +349,16 @@
             // 7月25日～26日：るあを実家に預ける
             if (month === 6 && dateNum >= 25 && dateNum <= 26) {
                 events.push({ text: 'るあ実家へ', class: 'stay' });
+            }
+
+            // 7月27日～29日：学校の自習（午前）
+            if (month === 6 && dateNum >= 27 && dateNum <= 29) {
+                events.push({ text: '学校自習', class: 'jyugi' });
+            }
+
+            // 7月28日：ゆあ プライベートプール
+            if (month === 6 && dateNum === 28) {
+                events.push({ text: 'ゆあ プール', class: 'pool' });
             }
 
             // 7月26日：ベイコムで空手交流会
