@@ -489,6 +489,11 @@
                 events.push({ text: 'るあ実家へ', class: 'stay', period: 'pm' });
             }
 
+            // 7月25日：笹原まつり（小学校のまつり・夕方）
+            if (month === 6 && dateNum === 25) {
+                events.push({ text: '笹原まつり', class: 'event', period: 'pm' });
+            }
+
             // 7月27日～29日：学校の自習（午前）
             if (month === 6 && dateNum >= 27 && dateNum <= 29) {
                 events.push({ text: '学校自習', class: 'jyugi', period: 'am' });
