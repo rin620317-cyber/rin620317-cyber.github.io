@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孫のスケジュール表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .zoom-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            border: 3px solid #667eea;
+        }
+
+        .zoom-info span {
+            color: #e65100;
+            font-size: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .calendar-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .month-calendar {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .month-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: #f0f0f0;
+            border-bottom: 3px solid #ddd;
+        }
+
+        .weekday {
+            padding: 18px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: #ddd;
+            padding: 2px;
+        }
+
+        .day {
+            background: white;
+            min-height: 150px;
+            padding: 12px;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-number {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .day.other-month .day-number {
+            color: #ccc;
+        }
+
+        .day.holiday {
+            background: #ffe6e6;
+        }
+
+        .day.holiday .day-number {
+            color: #d32f2f;
+        }
+
+        .events {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .event {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            border-left: 4px solid #1976d2;
+            font-weight: bold;
+        }
+
+        .event.jyugi {
+            background: #f3e5f5;
+            color: #7b1fa2;
+            border-left-color: #7b1fa2;
+        }
+
+        .event.karate {
+            background: #e8f5e9;
+            color: #388e3c;
+            border-left-color: #388e3c;
+        }
+
+        .event.kumon {
+            background: #fff3e0;
+            color: #e65100;
+            border-left-color: #e65100;
+        }
+
+        .event.stay {
+            background: #fce4ec;
+            color: #c2185b;
+            border-left-color: #c2185b;
+        }
+
+        .legend {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .legend-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 3px;
+            border-left: 4px solid;
+            flex-shrink: 0;
+        }
+
+        .legend-text {
+            font-size: 18px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .day.grayscale {
+            background: #f5f5f5;
+            filter: grayscale(100%);
+            opacity: 0.7;
+        }
+
+        .day.grayscale .day-number {
+            color: #999;
+        }
+
+        .day.grayscale .event {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="zoom-info">
+            📱 <span>ピンチイン/ピンチアウト</span>で画面を拡大・縮小できます
+        </div>
+        <div class="title">孫のスケジュール（7月～8月）</div>
+
+        <div class="calendar-wrapper">
+            <!-- 7月カレンダー -->
+            <div class="month-calendar">
+                <div class="month-title">2026年7月</div>
+                <div class="weekdays">
+                    <div class="weekday">日</div>
+                    <div class="weekday">月</div>
+                    <div class="weekday">火</div>
+                    <div class="weekday">水</div>
+                    <div class="weekday">木</div>
+                    <div class="weekday">金</div>
+                    <div class="weekday">土</div>
+                </div>
+                <div class="days" id="july-days"></div>
+            </div>
+
+            <!-- 8月カレンダー -->
+            <div class="month-calendar">
+                <div class="month-title">2026年8月</div>
+                <div class="weekdays">
+                    <div class="weekday">日</div>
+                    <div class="weekday">月</div>
+                    <div class="weekday">火</div>
+                    <div class="weekday">水</div>
+                    <div class="weekday">木</div>
+                    <div class="weekday">金</div>
+                    <div class="weekday">土</div>
+                </div>
+                <div class="days" id="august-days"></div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-title">スケジュール一覧</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f3e5f5; border-left-color: #7b1fa2;"></div>
+                    <div class="legend-text">学校の自習（午前）</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8f5e9; border-left-color: #388e3c;"></div>
+                    <div class="legend-text">空手（16:30～17:30）</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fff3e0; border-left-color: #e65100;"></div>
+                    <div class="legend-text">公文（14:30～）</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e3f2fd; border-left-color: #1976d2;"></div>
+                    <div class="legend-text">特別イベント</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fce4ec; border-left-color: #c2185b;"></div>
+                    <div class="legend-text">お泊り（宿泊・お預け）</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffe6e6;"></div>
+                    <div class="legend-text">祝日</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createCalendar(year, month) {
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const days = [];
+            const current = new Date(startDate);
+
+            // 6週間分のデータを作成
+            for (let i = 0; i < 42; i++) {
+                days.push(new Date(current));
+                current.setDate(current.getDate() + 1);
+            }
+
+            return days;
+        }
+
+        function getEvents(date) {
+            const events = [];
+            const dayOfWeek = date.getDay(); // 0=日、1=月、2=火...
+            const dateNum = date.getDate();
+            const month = date.getMonth();
+            const year = date.getFullYear();
+
+            // 7月21日～24日：学校の自習（午前）
+            if (month === 6 && dateNum >= 21 && dateNum <= 24) {
+                events.push({ text: '学校自習', class: 'jyugi' });
+            }
+
+            // 7月25日～26日：るあを実家に預ける
+            if (month === 6 && dateNum >= 25 && dateNum <= 26) {
+                events.push({ text: 'るあ実家へ', class: 'stay' });
+            }
+
+            // 7月26日：ベイコムで空手交流会
+            if (month === 6 && dateNum === 26) {
+                events.push({ text: '空手交流会', class: 'karate' });
+            }
+
+            // 8月1日：琉生のルービックキューブ大会
+            if (month === 7 && dateNum === 1) {
+                events.push({ text: 'ルービック大会', class: 'event' });
+            }
+
+            // 7月31日～8月2日：るあとゆあを預ける
+            if ((month === 6 && dateNum === 31) || (month === 7 && dateNum >= 1 && dateNum <= 2)) {
+                events.push({ text: 'るあとゆあ預け', class: 'stay' });
+            }
+
+            // 8月16日～17日：朝来宿泊（両親同行）
+            if (month === 7 && dateNum >= 16 && dateNum <= 17) {
+                events.push({ text: '朝来宿泊', class: 'stay' });
+            }
+
+            // 8月28日：始業式
+            if (month === 7 && dateNum === 28) {
+                events.push({ text: '始業式', class: 'jyugi' });
+            }
+
+            // 火曜日：空手（16:30～）
+            if (dayOfWeek === 2 && !(month === 6 && dateNum === 26)) {
+                events.push({ text: '空手16:30', class: 'karate' });
+            }
+
+            // 木曜日：空手（16:30～）
+            if (dayOfWeek === 4) {
+                events.push({ text: '空手16:30', class: 'karate' });
+            }
+
+            // 月曜日：公文（14:30～）
+            if (dayOfWeek === 1) {
+                // 7月31日（木曜日）は公文休みなので、月曜日の確認は不要
+                events.push({ text: '公文14:30', class: 'kumon' });
+            }
+
+            // 金曜日：公文（14:30～）
+            if (dayOfWeek === 5 && !(month === 6 && dateNum === 31) && !(month === 6 && dateNum === 26)) {
+                events.push({ text: '公文14:30', class: 'kumon' });
+            }
+
+            return events;
+        }
+
+        function isHoliday(date) {
+            const month = date.getMonth();
+            const dateNum = date.getDate();
+
+            // 7月20日（祝日）
+            if (month === 6 && dateNum === 20) return true;
+
+            return false;
+        }
+
+        function renderCalendar(year, month, containerId) {
+            const days = createCalendar(year, month);
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            days.forEach((date, index) => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'day';
+
+                const currentMonth = date.getMonth();
+                if (currentMonth !== month) {
+                    dayEl.classList.add('other-month');
+                }
+
+                if (isHoliday(date)) {
+                    dayEl.classList.add('holiday');
+                }
+
+                // 8月28日以降をグレースケール表示
+                if (date.getMonth() === 7 && date.getDate() >= 28) {
+                    dayEl.classList.add('grayscale');
+                }
+
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = date.getDate();
+                dayEl.appendChild(dayNumber);
+
+                const events = getEvents(date);
+                if (events.length > 0) {
+                    const eventsEl = document.createElement('div');
+                    eventsEl.className = 'events';
+
+                    events.forEach(event => {
+                        const eventEl = document.createElement('div');
+                        eventEl.className = `event ${event.class}`;
+                        eventEl.textContent = event.text;
+                        eventsEl.appendChild(eventEl);
+                    });
+
+                    dayEl.appendChild(eventsEl);
+                }
+
+                container.appendChild(dayEl);
+            });
+        }
+
+        // カレンダーをレンダリング
+        renderCalendar(2026, 6, 'july-days');  // 7月（月は0からなので6）
+        renderCalendar(2026, 7, 'august-days'); // 8月
+    </script>
+</body>
+</html>
