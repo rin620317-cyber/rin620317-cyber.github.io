@@ -136,9 +136,35 @@
             background: #fff9c4;
         }
 
-        .events {
+        .events-allday {
             font-size: 14px;
             line-height: 1.6;
+            margin-bottom: 6px;
+        }
+
+        .events {
+            display: flex;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .events-col {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .events-col.am {
+            padding-right: 6px;
+            margin-right: 6px;
+            border-right: 2px solid #eee;
+        }
+
+        .period-label {
+            display: block;
+            font-size: 10px;
+            font-weight: bold;
+            color: #aaa;
+            margin-bottom: 2px;
         }
 
         .event {
@@ -301,11 +327,27 @@
                 color: #d32f2f;
             }
 
+            .day-content {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .events-allday {
+                margin-bottom: 0;
+            }
+
             .events {
                 display: flex;
+            }
+
+            .events-col {
+                display: flex;
                 flex-wrap: wrap;
+                align-items: center;
                 gap: 6px;
-                flex: 1;
             }
 
             .event {
@@ -434,78 +476,78 @@
 
             // 7月21日～24日：学校の自習（午前）
             if (month === 6 && dateNum >= 21 && dateNum <= 24) {
-                events.push({ text: '学校自習', class: 'jyugi' });
+                events.push({ text: '学校自習', class: 'jyugi', period: 'am' });
             }
 
             // 7月21日：琉生・ゆあ 歯医者（午後）
             if (month === 6 && dateNum === 21) {
-                events.push({ text: '琉生・ゆあ 歯医者(午後)', class: 'event' });
+                events.push({ text: '琉生・ゆあ 歯医者', class: 'event', period: 'pm' });
             }
 
-            // 7月25日～26日：るあを実家に預ける
+            // 7月25日～26日：るあを実家に預ける（25日午後～26日夕方）
             if (month === 6 && dateNum >= 25 && dateNum <= 26) {
-                events.push({ text: 'るあ実家へ', class: 'stay' });
+                events.push({ text: 'るあ実家へ', class: 'stay', period: 'pm' });
             }
 
             // 7月27日～29日：学校の自習（午前）
             if (month === 6 && dateNum >= 27 && dateNum <= 29) {
-                events.push({ text: '学校自習', class: 'jyugi' });
+                events.push({ text: '学校自習', class: 'jyugi', period: 'am' });
             }
 
-            // 7月28日：ゆあ プライベートプール
+            // 7月28日：ゆあ プライベートプール（午前）
             if (month === 6 && dateNum === 28) {
-                events.push({ text: 'ゆあ プール', class: 'pool' });
+                events.push({ text: 'ゆあ プール', class: 'pool', period: 'am' });
             }
 
-            // 7月26日：ベイコムで空手交流会
+            // 7月26日：ベイコムで空手交流会（午前）
             if (month === 6 && dateNum === 26) {
-                events.push({ text: '空手交流会', class: 'karate' });
+                events.push({ text: '空手交流会', class: 'karate', period: 'am' });
             }
 
             // 8月1日：琉生のルービックキューブ大会
             if (month === 7 && dateNum === 1) {
-                events.push({ text: 'ルービック大会', class: 'event' });
+                events.push({ text: 'ルービック大会', class: 'event', period: 'am' });
             }
 
-            // 7月31日～8月2日：るあとゆあを預ける
+            // 7月31日～8月2日：るあとゆあを預ける（終日）
             if ((month === 6 && dateNum === 31) || (month === 7 && dateNum >= 1 && dateNum <= 2)) {
-                events.push({ text: 'るあとゆあ預け', class: 'stay' });
+                events.push({ text: 'るあとゆあ預け', class: 'stay', period: 'all' });
             }
 
-            // 8月16日～17日：朝来宿泊（両親同行）
+            // 8月16日～17日：朝来宿泊（両親同行・両日終日）
             if (month === 7 && dateNum >= 16 && dateNum <= 17) {
-                events.push({ text: '朝来宿泊', class: 'stay' });
+                events.push({ text: '朝来宿泊', class: 'stay', period: 'all' });
             }
 
-            // 8月11日～14日：るあ保育園休み（4日間）
+            // 8月11日～14日：るあ保育園休み（4日間・終日）
             if (month === 7 && dateNum >= 11 && dateNum <= 14) {
-                events.push({ text: 'るあ保育園休み', class: 'hoikuen' });
+                events.push({ text: 'るあ保育園休み', class: 'hoikuen', period: 'all' });
             }
 
-            // 8月28日：始業式
+            // 8月28日：始業式（午前）
             if (month === 7 && dateNum === 28) {
-                events.push({ text: '始業式', class: 'jyugi' });
+                events.push({ text: '始業式', class: 'jyugi', period: 'am' });
             }
 
             // 火曜日：空手（16:30～）
             if (dayOfWeek === 2 && !(month === 6 && dateNum === 26)) {
-                events.push({ text: '空手16:30', class: 'karate' });
+                events.push({ text: '空手16:30', class: 'karate', period: 'pm' });
             }
 
             // 木曜日：空手（16:30～）
             if (dayOfWeek === 4) {
-                events.push({ text: '空手16:30', class: 'karate' });
+                events.push({ text: '空手16:30', class: 'karate', period: 'pm' });
             }
 
             // 月曜日：公文（14:30～）
             if (dayOfWeek === 1) {
                 // 7月31日（木曜日）は公文休みなので、月曜日の確認は不要
-                events.push({ text: '公文14:30', class: 'kumon' });
+                events.push({ text: '公文14:30', class: 'kumon', period: 'pm' });
             }
 
             // 金曜日：公文（14:30～）
             if (dayOfWeek === 5 && !(month === 6 && dateNum === 31) && !(month === 6 && dateNum === 26)) {
-                events.push({ text: '公文14:30', class: 'kumon' });
+                events.push({ text: '公文14:30', class: 'kumon', period: 'pm' });
             }
 
             return events;
@@ -590,17 +632,57 @@
 
                 const events = getEvents(date);
                 if (events.length > 0) {
-                    const eventsEl = document.createElement('div');
-                    eventsEl.className = 'events';
+                    const contentEl = document.createElement('div');
+                    contentEl.className = 'day-content';
 
-                    events.forEach(event => {
+                    const makeEventEl = (event) => {
                         const eventEl = document.createElement('div');
                         eventEl.className = `event ${event.class}`;
                         eventEl.textContent = event.text;
-                        eventsEl.appendChild(eventEl);
-                    });
+                        return eventEl;
+                    };
 
-                    dayEl.appendChild(eventsEl);
+                    const allEvents = events.filter(e => e.period === 'all');
+                    const amEvents = events.filter(e => e.period === 'am');
+                    const pmEvents = events.filter(e => e.period === 'pm');
+
+                    if (allEvents.length > 0) {
+                        const alldayEl = document.createElement('div');
+                        alldayEl.className = 'events-allday';
+                        allEvents.forEach(event => alldayEl.appendChild(makeEventEl(event)));
+                        contentEl.appendChild(alldayEl);
+                    }
+
+                    if (amEvents.length > 0 || pmEvents.length > 0) {
+                        const eventsEl = document.createElement('div');
+                        eventsEl.className = 'events';
+
+                        const amCol = document.createElement('div');
+                        amCol.className = 'events-col am';
+                        if (amEvents.length > 0) {
+                            const amLabel = document.createElement('span');
+                            amLabel.className = 'period-label';
+                            amLabel.textContent = '午前';
+                            amCol.appendChild(amLabel);
+                        }
+                        amEvents.forEach(event => amCol.appendChild(makeEventEl(event)));
+
+                        const pmCol = document.createElement('div');
+                        pmCol.className = 'events-col pm';
+                        if (pmEvents.length > 0) {
+                            const pmLabel = document.createElement('span');
+                            pmLabel.className = 'period-label';
+                            pmLabel.textContent = '午後';
+                            pmCol.appendChild(pmLabel);
+                        }
+                        pmEvents.forEach(event => pmCol.appendChild(makeEventEl(event)));
+
+                        eventsEl.appendChild(amCol);
+                        eventsEl.appendChild(pmCol);
+                        contentEl.appendChild(eventsEl);
+                    }
+
+                    dayEl.appendChild(contentEl);
                 }
 
                 container.appendChild(dayEl);
