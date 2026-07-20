@@ -346,6 +346,11 @@
                 events.push({ text: '学校自習', class: 'jyugi' });
             }
 
+            // 7月21日：琉生・ゆあ 歯医者（午後）
+            if (month === 6 && dateNum === 21) {
+                events.push({ text: '琉生・ゆあ 歯医者(午後)', class: 'event' });
+            }
+
             // 7月25日～26日：るあを実家に預ける
             if (month === 6 && dateNum >= 25 && dateNum <= 26) {
                 events.push({ text: 'るあ実家へ', class: 'stay' });
