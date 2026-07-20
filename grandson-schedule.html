@@ -116,12 +116,24 @@
             color: #ccc;
         }
 
+        .day.saturday:not(.other-month) {
+            background: #e8f2fe;
+        }
+
+        .day.sunday:not(.other-month) {
+            background: #fdeeee;
+        }
+
         .day.holiday {
-            background: #ffe6e6;
+            background: #ffcdd2;
         }
 
         .day.holiday .day-number {
             color: #d32f2f;
+        }
+
+        .day.today:not(.other-month) {
+            background: #fff9c4;
         }
 
         .events {
@@ -375,8 +387,20 @@
                     <div class="legend-text">ゆあ プライベートプール</div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #ffe6e6;"></div>
+                    <div class="legend-color" style="background: #ffcdd2;"></div>
                     <div class="legend-text">祝日</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8f2fe;"></div>
+                    <div class="legend-text">土曜日</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fdeeee;"></div>
+                    <div class="legend-text">日曜日</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #fff9c4;"></div>
+                    <div class="legend-text">本日</div>
                 </div>
             </div>
         </div>
@@ -491,10 +515,20 @@
             const month = date.getMonth();
             const dateNum = date.getDate();
 
-            // 7月20日（祝日）
+            // 7月20日（海の日）
             if (month === 6 && dateNum === 20) return true;
 
+            // 8月11日（山の日）
+            if (month === 7 && dateNum === 11) return true;
+
             return false;
+        }
+
+        function isToday(date) {
+            const now = new Date();
+            return date.getFullYear() === now.getFullYear() &&
+                date.getMonth() === now.getMonth() &&
+                date.getDate() === now.getDate();
         }
 
         function renderCalendar(year, month, containerId) {
@@ -513,6 +547,16 @@
 
                 if (isHoliday(date)) {
                     dayEl.classList.add('holiday');
+                }
+
+                if (date.getDay() === 6) {
+                    dayEl.classList.add('saturday');
+                } else if (date.getDay() === 0) {
+                    dayEl.classList.add('sunday');
+                }
+
+                if (isToday(date)) {
+                    dayEl.classList.add('today');
                 }
 
                 // 8月28日以降をグレースケール表示
